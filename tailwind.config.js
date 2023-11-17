@@ -6,6 +6,9 @@ module.exports = {
       colors: {
         "carzilla-purple-primary": "#524edd",
       },
+      fontFamily: {
+        "lexend-deca": ["Lexend Deca", "sans-serif"],
+      },
     },
   },
   plugins: [],

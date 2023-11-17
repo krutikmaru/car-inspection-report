@@ -3,9 +3,9 @@ import TopNavigationBar from "../components/TopNavigationBar/TopNavigationBar";
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <div className="font-lexend-deca ">
       <TopNavigationBar />
-      {children}
+      <div className="mx-10 md:mx-20">{children}</div>
     </div>
   );
 };
