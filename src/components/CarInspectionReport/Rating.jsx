@@ -12,7 +12,7 @@ export const Rating = () => {
     <div className="mt-10 ">
       {/* Title ⬇️ */}
       <div>
-        <h1 className="text-4xl text-gray-700 font-semibold">
+        <h1 className="text-4xl text-gray-800 font-semibold">
           Lamborghini Huracan
         </h1>
       </div>

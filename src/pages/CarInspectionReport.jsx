@@ -1,6 +1,7 @@
 import React from "react";
 import { Rating } from "../components/CarInspectionReport/Rating";
 import { OverallScore } from "../components/CarInspectionReport/OverallScore";
+import { Details } from "../components/CarInspectionReport/Details";
 
 const CarInspectionReport = () => {
   return (
@@ -8,6 +9,7 @@ const CarInspectionReport = () => {
       <div className="w-full min-h-screen">
         <Rating />
         <OverallScore />
+        <Details />
       </div>
     </div>
   );
