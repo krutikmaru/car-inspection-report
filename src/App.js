@@ -1,8 +1,11 @@
+import Layout from "./layout/Layout";
+import CarInspectionReport from "./pages/CarInspectionReport";
+
 function App() {
   return (
-    <div className="App">
-      <h1 className="text-lime-500">Car Inspection Report</h1>
-    </div>
+    <Layout>
+      <CarInspectionReport />
+    </Layout>
   );
 }
 
