@@ -1,11 +1,14 @@
+import { ApplicationManagerProvider } from "./contexts/ApplicationContext";
 import Layout from "./layout/Layout";
 import CarInspectionReport from "./pages/CarInspectionReport";
 
 function App() {
   return (
-    <Layout>
-      <CarInspectionReport />
-    </Layout>
+    <ApplicationManagerProvider>
+      <Layout>
+        <CarInspectionReport />
+      </Layout>
+    </ApplicationManagerProvider>
   );
 }
 
