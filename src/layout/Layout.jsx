@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
     <div className="font-lexend-deca ">
       <TopNavigationBar />
       <FullScreenPopupCenter />
-      <div className="mx-10 md:mx-20">{children}</div>
+      <div className="mx-10 md:mx-32">{children}</div>
     </div>
   );
 };
