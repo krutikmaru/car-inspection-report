@@ -2,22 +2,12 @@ import React, { useEffect, useState } from "react";
 import { OverallScore } from "./OverallScore";
 import { Rating } from "./Rating";
 import FloatingHelper from "./FloatingHelper";
-import InspectionSingle from "./InspectionSingle";
-import { structure } from "../utils/FormStructure";
 import axios from "axios";
+import InspectionSingle2 from "./InspectionSingle2";
 
 const CarInspectionForm = () => {
-  const [engineAndTransmission, setEngineAndTransmission] = useState(
-    structure[0].initialState
-  );
-  const [steeringSuspensionBrakes, setSteeringSuspensionBrakes] = useState(
-    structure[1].initialState
-  );
-  const [
-    interiorElectricalsAirconditioner,
-    setInteriorElectricalsAirconditioner,
-  ] = useState(structure[2].initialState);
-  const [carSpecs, setCarSpecs] = useState(structure[3].initialState);
+  const [data, setData] = useState({ fields: [] });
+
   useEffect(() => {
     axios
       .get(
@@ -36,13 +26,12 @@ const CarInspectionForm = () => {
             };
           })
           .splice(2);
-        // console.log(apiData);
 
         const structuredData = [];
         let currentField = null;
 
         for (const entry of apiData) {
-          if (entry.options === "") {
+          if (entry.options === "" || entry.options === "\n") {
             if (currentField) {
               structuredData.push(currentField);
             }
@@ -55,7 +44,22 @@ const CarInspectionForm = () => {
             currentField.options.push({
               fieldname: entry.fieldname,
               label: entry.label,
-              options: entry.options.trim().split("\n"),
+              values: entry.options.trim().split("\n"),
+              value: entry.options.trim().split("\n")[0],
+              totalFields: entry.options
+                .trim()
+                .split("\n")
+                .filter(
+                  (value) =>
+                    value !== "NA" && value !== "N/A" && value !== "#N/A"
+                ).length,
+              score: entry.options
+                .trim()
+                .split("\n")
+                .filter(
+                  (value) =>
+                    value !== "NA" && value !== "N/A" && value !== "#N/A"
+                ).length,
             });
           }
         }
@@ -69,58 +73,75 @@ const CarInspectionForm = () => {
 
         // Print or use the 'result' variable as needed
         console.log(result);
+        setData(result);
       })
       .catch((err) => console.log(err));
   }, []);
-  const statesArray = [
-    { state: engineAndTransmission, setter: setEngineAndTransmission },
-    { state: steeringSuspensionBrakes, setter: setSteeringSuspensionBrakes },
-    {
-      state: interiorElectricalsAirconditioner,
-      setter: setInteriorElectricalsAirconditioner,
-    },
-    {
-      state: carSpecs,
-      setter: setCarSpecs,
-    },
-  ];
 
-  const handleDataChange = (field, newValue, state, setter) => {
-    console.log(field, newValue);
-    setter({
-      ...state,
-      [field]: {
-        title: state[field].title,
-        value: newValue,
-        values: state[field].values,
-      },
+  const handleDataChange = (
+    categoryFieldName,
+    categoryIndex,
+    optionFieldName,
+    optionIndex,
+    newValue
+  ) => {
+    setData((prevData) => {
+      const newData = { ...prevData };
+      newData.fields[categoryIndex].options[optionIndex].value = newValue;
+      newData.fields[categoryIndex].options[optionIndex].score =
+        newData.fields[categoryIndex].options[optionIndex].totalFields -
+        (newData.fields[categoryIndex].options[optionIndex].values.indexOf(
+          newValue
+        ) +
+          1);
+      // console.log(
+      //   newData.fields[categoryIndex].options[optionIndex].totalFields
+      // );
+      // console.log(
+      //   newData.fields[categoryIndex].options[optionIndex].values.indexOf(
+      //     newValue
+      //   )
+      // );
+
+      return newData;
     });
   };
-  console.log(statesArray[1]);
   return (
     <div className="w-full min-h-screen pb-32 ">
       <div className="w-full min-h-screen">
-        <FloatingHelper />
-        <Rating />
-        <OverallScore />
-        {structure.map((inspection, index) => {
-          return (
-            <InspectionSingle
-              inspectionTitle={inspection.inspectionTitle}
-              fields={inspection.fields}
-              data={statesArray[index].state}
-              bookmark={inspection.bookmark}
-              handleDataChange={(field, newValue) =>
-                handleDataChange(
-                  field,
-                  newValue,
-                  statesArray[index].state,
-                  statesArray[index].setter
-                )
-              }
-            />
-          );
-        })}
+        {data && (
+          <FloatingHelper
+            bookmarks={data.fields.map((field) => {
+              return { bookmark: field.fieldname, title: field.label };
+            })}
+          />
+        )}
+        {data && <Rating data={data} />}
+        {data && <OverallScore data={data} />}
+        {!data ? (
+          <h1>Loading</h1>
+        ) : (
+          <>
+            {data.fields.map((category, index) => {
+              return (
+                <InspectionSingle2
+                  handleDataChange={(optionFieldName, optionIndex, newValue) =>
+                    handleDataChange(
+                      category.fieldname,
+                      index,
+                      optionFieldName,
+                      optionIndex,
+                      newValue
+                    )
+                  }
+                  inspectionTitle={category.label}
+                  bookmark={category.fieldname}
+                  options={category.options}
+                />
+              );
+            })}
+          </>
+        )}
       </div>
     </div>
   );

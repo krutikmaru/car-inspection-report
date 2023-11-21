@@ -1,6 +1,6 @@
 import React from "react";
 
-const InspectionSingle = ({
+const InspectionSingle2 = ({
   inspectionTitle,
   fields,
   data,
@@ -53,7 +53,7 @@ const InspectionSingle = ({
   );
 };
 
-export default InspectionSingle;
+export default InspectionSingle2;
 
 const Dropdown = ({ field, title, value, handleChange, options }) => {
   let selectTailwind =

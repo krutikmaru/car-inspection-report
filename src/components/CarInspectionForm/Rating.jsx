@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 
-export const Rating = () => {
-  const [rating, setRating] = useState(0);
-  const handleRatingChange = (e) => {
-    if (e.target.value < 0 || e.target.value > 10) {
-      setRating(0);
-      return;
+export const Rating = ({ data }) => {
+  let maxScore = 0;
+  let total = 0;
+  data.fields.map((field) => {
+    for (const option of field.options) {
+      maxScore += option.totalFields;
     }
-    setRating(e.target.value);
-  };
+    for (const option of field.options) {
+      total += option.score;
+    }
+    return undefined;
+  });
+  const rating = Math.round((total / maxScore) * 100) / 10;
   return (
     <div className="mt-10 ">
       {/* Title ⬇️ */}
@@ -21,12 +25,11 @@ export const Rating = () => {
         <div className="w-full">
           <span className="text-sm ml-2 text-gray-400">Overall rating</span>
           <input
-            type="number"
-            value={rating}
+            disabled
+            value={`${rating}/10`}
             className="w-full h-10 bg-[#f6f5f5] border-none outline-none p-3 rounded-md"
             placeholder="Enter rating"
             max={10}
-            onChange={(e) => handleRatingChange(e)}
           />
         </div>
       </div>
