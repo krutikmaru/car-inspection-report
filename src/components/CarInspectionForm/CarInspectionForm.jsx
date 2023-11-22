@@ -4,6 +4,7 @@ import { Rating } from "./Rating";
 import FloatingHelper from "./FloatingHelper";
 import axios from "axios";
 import InspectionSingle2 from "./InspectionSingle2";
+import { ExteriorCondition } from "./ExteriorCondition";
 
 const CarInspectionForm = () => {
   const [data, setData] = useState({ fields: [] });
@@ -142,6 +143,7 @@ const CarInspectionForm = () => {
             })}
           </>
         )}
+        {data && <ExteriorCondition />}
       </div>
     </div>
   );

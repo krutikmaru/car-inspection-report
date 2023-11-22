@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 const FloatingHelper = ({ bookmarks }) => {
   const [isMinimized, setIsMinimized] = useState(true);
-  const parentTailwind = `fixed left-10 bottom-10 bg-carzilla-purple-primary rounded-md text-white p-${
+  const parentTailwind = `fixed left-10 bottom-10 z-10 bg-carzilla-purple-primary rounded-md text-white p-${
     isMinimized ? 3 : 10
   }`;
   return (
@@ -36,6 +36,14 @@ const FloatingHelper = ({ bookmarks }) => {
                 </li>
               );
             })}
+            <li className="cursor-pointer underline mb-4">
+              <a
+                href={`#exterior_condition`}
+                onClick={() => setIsMinimized(true)}
+              >
+                Exterior Condition
+              </a>
+            </li>
           </ul>
         </>
       )}
